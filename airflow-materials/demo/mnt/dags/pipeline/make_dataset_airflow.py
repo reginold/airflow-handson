@@ -4,6 +4,8 @@ import click
 import numpy as np
 import pandas as pd
 
+from module import read_yaml
+
 
 def _save_datasets(train, test, outdir: Path, flag):
     """Save data sets into nice directory structure and write SUCCESS flag."""
@@ -51,8 +53,9 @@ def make_datasets(in_csv, out_dir, flag):
 
 
 if __name__ == "__main__":
+    config = read_yaml()
     make_datasets(
-        in_csv="~/dags/pipeline/dataset/raw/wine_dataset.csv",
-        out_dir="~/dags/pipeline/dataset/interim/",
-        flag=".SUCCESS_MakeDatasets",
+        in_csv=config["make_dataset"]["in_csv"],
+        out_dir=config["make_dataset"]["out_dir"],
+        flag=config["make_dataset"]["flag"],
     )

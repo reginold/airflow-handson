@@ -1,0 +1,14 @@
+# Author: Lu Bowen
+version: "1.0"
+# How to set the constant vairable in yaml file
+# BASE_DIR: /usr/local/airflow/dags/
+
+download_data:
+  name: wine_dataset
+  url: https://github.com/datarevenue-berlin/code-challenge-2019/releases/download/0.1.0/dataset_sampled.csv
+  out_dir: /usr/local/airflow/dags/pipeline/dataset/raw/
+
+make_dataset:
+  in_csv: ~/dags/pipeline/dataset/raw/wine_dataset.csv
+  out_dir: ~/dags/pipeline/dataset/interim/
+  flag: .SUCCESS_MakeDatasets
