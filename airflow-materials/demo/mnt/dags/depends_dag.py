@@ -15,14 +15,21 @@ with DAG(
 ) as dag:
 
     # Task 1
-    bash_task_1 = BashOperator(
-        task_id="bash_task_1",
+    down_dataset = BashOperator(
+        task_id="down_dataset",
         bash_command="python ~/dags/pipeline/download_data_airflow.py",
     )
-    # Task 2
-    # bash_task_2 = BashOperator(
-    #     task_id="bash_task_2",
-    #     bash_command="python ~/dags/pipeline/make_dataset_airflow.py",
-    # )
 
-    # bash_task_1 >> bash_task_2
+    # Task 2
+    make_dataset = BashOperator(
+        task_id="make_dataset",
+        bash_command="python ~/dags/pipeline/make_dataset_airflow.py",
+    )
+
+    # Task 3
+    clean_dataset = BashOperator(
+        task_id="clean_dataset",
+        bash_command="python ~/dags/pipeline/clean_data_airflow.py",
+    )
+
+    down_dataset >> make_dataset >> clean_dataset

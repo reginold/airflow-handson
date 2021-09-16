@@ -3,7 +3,8 @@ import urllib.request
 from pathlib import Path
 
 import click
-import yaml
+
+from module.read_yaml import read_yaml
 
 logging.basicConfig(level=logging.INFO)
 
@@ -42,11 +43,11 @@ def download_data(name, url, out_dir):
 
 
 if __name__ == "__main__":
-
+    config = read_yaml()
 
     # modify the out directory to the raw
     download_data(
-        name=config_file["download_data"]["name"],
-        url=config_file["download_data"]["url"],
-        out_dir=config_file["download_data"]["out_dir"],
+        name=config["download_data"]["name"],
+        url=config["download_data"]["url"],
+        out_dir=config["download_data"]["out_dir"],
     )

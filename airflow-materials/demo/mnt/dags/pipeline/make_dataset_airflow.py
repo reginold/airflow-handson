@@ -4,21 +4,18 @@ import click
 import numpy as np
 import pandas as pd
 
-from module import read_yaml
+from module.read_yaml import read_yaml
 
 
-def _save_datasets(train, test, outdir: Path, flag):
+def _save_datasets(train, test, outdir: Path):
     """Save data sets into nice directory structure and write SUCCESS flag."""
     # csv paths and flag path
     out_train = outdir / "train.csv/"
     out_test = outdir / "test.csv/"
-    flag = outdir / flag
 
     # save as csv and create flag file
     train.to_csv(str(out_train), index=False)
     test.to_csv(str(out_test), index=False)
-
-    flag.touch()
 
 
 # @click.command()
@@ -49,7 +46,7 @@ def make_datasets(in_csv, out_dir, flag):
     train_idx = idx[n_samples // 10 :]
     train = ddf.loc[train_idx]
 
-    _save_datasets(train, test, out_dir, flag)
+    _save_datasets(train, test, out_dir)
 
 
 if __name__ == "__main__":

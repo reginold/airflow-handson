@@ -1,6 +1,6 @@
 # Author: Lu Bowen
 version: "1.0"
-# How to set the constant vairable in yaml file
+# TODO: How to set the constant vairable in yaml file
 # BASE_DIR: /usr/local/airflow/dags/
 
 download_data:
@@ -12,3 +12,9 @@ make_dataset:
   in_csv: ~/dags/pipeline/dataset/raw/wine_dataset.csv
   out_dir: ~/dags/pipeline/dataset/interim/
   flag: .SUCCESS_MakeDatasets
+
+clean_dataset:
+  in_train_csv: ~/dags/pipeline/dataset/interim/train.csv
+  in_test_csv: ~/dags/pipeline/dataset/interim/test.csv
+  out_dir: ~/dags/pipeline/dataset/interim/
+  flag: .SUCCESS_CleanData
