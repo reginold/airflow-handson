@@ -27,3 +27,6 @@ __pycache__
 
 # csv file
 *.csv
+
+# json file
+*.json
