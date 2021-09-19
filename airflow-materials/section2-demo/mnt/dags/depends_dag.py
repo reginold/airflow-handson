@@ -1,25 +1,16 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
-from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 
+from pipeline.process import second_task, third_task
+
 default_args = {
-    "start_date": datetime(2021, 8, 30),
-    "owner": "Airflow",
+    "start_date": datetime(2021, 8, 29),
+    "owner": "RDL",
     "email": "owner@test.com",
 }
-
-
-def second_task():
-    print("Hello from second_task")
-    # raise ValueError('This will turns the python task in failed state')
-
-
-def third_task():
-    print("Hello from third_task")
-    # raise ValueError("This will turns the python task in failed state")
 
 
 with DAG(

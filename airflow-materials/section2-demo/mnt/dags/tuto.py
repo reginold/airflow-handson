@@ -8,7 +8,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 
 default_args = {
-    "owner": "airflow",
+    "owner": "RDL",
     "depends_on_past": False,
     "start_date": datetime(2015, 6, 1),
     "email": ["airflow@airflow.com"],
