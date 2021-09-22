@@ -30,3 +30,11 @@ __pycache__
 
 # json file
 *.json
+
+# image file
+*.png
++.jpg
+
+# model file
+*.pkl
+*.sav

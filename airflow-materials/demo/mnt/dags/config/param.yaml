@@ -11,10 +11,34 @@ download_data:
 make_dataset:
   in_csv: ~/dags/pipeline/dataset/raw/wine_dataset.csv
   out_dir: ~/dags/pipeline/dataset/interim/
-  flag: .SUCCESS_MakeDatasets
 
 clean_dataset:
   in_train_csv: ~/dags/pipeline/dataset/interim/train.csv
   in_test_csv: ~/dags/pipeline/dataset/interim/test.csv
   out_dir: ~/dags/pipeline/dataset/interim/
-  flag: .SUCCESS_CleanData
+
+extract_feature:
+  in_train_csv: ~/dags/pipeline/dataset/interim/train_cleaned.csv
+  in_test_csv: ~/dags/pipeline/dataset/interim/test_cleaned.csv
+  out_dir: ~/dags/pipeline/dataset/interim/
+
+transform_data:
+  in_train_csv: ~/dags/pipeline/dataset/interim/train_features_extracted.csv
+  in_test_csv: ~/dags/pipeline/dataset/interim/test_features_extracted.csv
+  out_dir: ~/dags/pipeline/dataset/interim/
+
+impute_datasets:
+  in_train_csv: ~/dags/pipeline/dataset/interim/train_transformed.csv
+  in_test_csv: ~/dags/pipeline/dataset/interim/test_transformed.csv
+  out_dir: ~/dags/pipeline/dataset/interim/
+
+train_model:
+  in_train_features_csv: ~/dags/pipeline/dataset/interim/train_features.csv
+  in_train_target_csv: ~/dags/pipeline/dataset/interim/train_target.csv
+  out_dir: /usr/local/airflow/dags/pipeline/dataset/output/
+
+evaluate_model:
+  in_test_features_csv: ~/dags/pipeline/dataset/interim/test_features.csv
+  in_test_target_csv: ~/dags/pipeline/dataset/interim/test_target.csv
+  in_trained_model: /usr/local/airflow/dags/pipeline/dataset/output/model.sav
+  out_dir: /usr/local/airflow/dags/pipeline/dataset/output/

@@ -50,7 +50,7 @@ def CleanData(df, drop_columns, target_name):
 # @click.option("--in-test-csv")
 # @click.option("--out-dir")
 # @click.option("--flag")
-def clean_datasets(in_train_csv, in_test_csv, out_dir, flag):
+def clean_datasets(in_train_csv, in_test_csv, out_dir):
     # create directory
     out_dir = Path(out_dir)
 
@@ -76,5 +76,4 @@ if __name__ == "__main__":
         in_train_csv=config["clean_dataset"]["in_train_csv"],
         in_test_csv=config["clean_dataset"]["in_test_csv"],
         out_dir=config["clean_dataset"]["out_dir"],
-        flag=config["clean_dataset"]["flag"],
     )

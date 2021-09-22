@@ -22,7 +22,7 @@ def _save_datasets(train, test, outdir: Path):
 # @click.option('--in-csv')
 # @click.option('--out-dir')
 # @click.option('--flag')
-def make_datasets(in_csv, out_dir, flag):
+def make_datasets(in_csv, out_dir):
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -54,5 +54,4 @@ if __name__ == "__main__":
     make_datasets(
         in_csv=config["make_dataset"]["in_csv"],
         out_dir=config["make_dataset"]["out_dir"],
-        flag=config["make_dataset"]["flag"],
     )
