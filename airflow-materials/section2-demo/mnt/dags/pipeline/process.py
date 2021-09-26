@@ -1,8 +1,9 @@
-def second_task(test):
-    print("Hello from second_task")
-    # raise ValueError("This will turns the python task in failed state")
+def second_task(**context):
+    print("This is ----------- task 2")
+    return "hoge======"
 
 
-def third_task():
-    # print("Hello from third_task")
-    raise ValueError("This will turns the python task in failed state")
+def third_task(**context):
+    output = context["task_instance"].xcom_pull(task_ids="python_task_2")
+    print("This is ----------- task 3")
+    return "This is the result : " + output
