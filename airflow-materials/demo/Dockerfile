@@ -9,6 +9,9 @@ ARG AIRFLOW_HOME=/usr/local/airflow
 # Export the environment variable AIRFLOW_HOME where airflow will be installed
 ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 
+# Custom python package
+COPY ./requirements.txt /requirements.txt
+
 # Install dependencies and tools
 RUN apt-get update -yqq && \
     apt-get upgrade -yqq && \
@@ -32,6 +35,7 @@ RUN apt-get update -yqq && \
     gcc \
     vim \
     locales \
+    && pip install -r requirements.txt \ 
     && apt-get clean
 
 COPY ./constraints-3.8.txt /constraints-3.8.txt

@@ -6,10 +6,11 @@ services:
 
   airflow:
     build: .
-    # restart: always
+    restart: always
     container_name: airflow
     volumes:
       - ./mnt/dags:/usr/local/airflow/dags
+      - ./mnt/test_dags:/usr/local/airflow/test_dags
     ports:
       - 8080:8080
     healthcheck:

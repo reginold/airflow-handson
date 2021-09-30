@@ -2,9 +2,8 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
-from airflow.operators.python_operator import PythonOperator
-
 from pipeline.process import second_task, third_task
+
 
 default_args = {
     "start_date": datetime(2021, 8, 29),
