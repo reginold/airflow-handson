@@ -11,3 +11,4 @@ docker-compose up -d --force-recreate
 # docker volume prune -f
 # docker network prune -f
 # docker rmi -f $(docker images -a -q)
+
