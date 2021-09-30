@@ -6,7 +6,7 @@ services:
 
   airflow:
     build: .
-    # restart: always
+    restart: always
     container_name: airflow
     volumes:
       - ./mnt/dags:/usr/local/airflow/dags
@@ -17,3 +17,13 @@ services:
       timeout: 45s
       interval: 10s
       retries: 10
+
+######################################################
+# NETWORK
+######################################################
+
+# Change name of default network otherwise URI invalid for HIVE
+# because of the _ contained by default network
+networks:
+  default:
+    name: airflow-network
