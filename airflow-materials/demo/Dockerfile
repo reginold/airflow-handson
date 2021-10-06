@@ -41,6 +41,9 @@ COPY ./constraints-3.8.txt /constraints-3.8.txt
 # Install apache airflow with subpackages
 RUN pip install --upgrade pip && \
     useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow && \
+    pip install category_encoders \
+    seaborn \
+    matplotlib \
     pip install apache-airflow[postgres]==${AIRFLOW_VERSION} --constraint /constraints-3.8.txt
 
 # Copy the entrypoint.sh from host to container (at path AIRFLOW_HOME)

@@ -1,24 +1,26 @@
-import pandas as pd
-import click
-from pathlib import Path
-import re
 import datetime
+import re
+from pathlib import Path
+
+import click
+import pandas as pd
+
 from module.read_yaml import read_yaml
+
 
 def _save_datasets(train, test, outdir: Path):
     """save features extracted train and test datasets and write SUCCESS flag."""
     # csv paths and flag path
-    out_train = outdir / 'train_features_extracted.csv/'
-    out_test = outdir / 'test_features_extracted.csv/'
+    out_train = outdir / "train_features_extracted.csv/"
+    out_test = outdir / "test_features_extracted.csv/"
 
     # save as csv and create flag file
     train.to_csv(str(out_train), index=False)
     test.to_csv(str(out_test), index=False)
 
+
 # description
-def extract_features_from_description(df,
-                                      new_feature_name,
-                                      extract_words):
+def extract_features_from_description(df, new_feature_name, extract_words):
     """perform regex search in the description column.
     add new binary column if any of the extract words are found
 
@@ -35,20 +37,15 @@ def extract_features_from_description(df,
          Returns
          -------
          modified dataframe
-         """
+    """
 
-    check_regex = (r'\b(?:{})\b'
-                   .format('|'
-                           .join(
-                               map(re.escape,
-                                   extract_words))))
+    check_regex = r"\b(?:{})\b".format("|".join(map(re.escape, extract_words)))
 
-    df[new_feature_name] = (df['description']
-                            .str
-                            .contains(check_regex,
-                                      regex=True)
-                            .astype('uint8'))
+    df[new_feature_name] = (
+        df["description"].str.contains(check_regex, regex=True).astype("uint8")
+    )
     return df
+
 
 # title
 def extract_year_from_title(title_num_list):
@@ -65,7 +62,7 @@ def extract_year_from_title(title_num_list):
              Returns
              -------
              integer (as year or 0)
-             """
+    """
 
     int_list = []
     now = datetime.datetime.now()
@@ -78,6 +75,7 @@ def extract_year_from_title(title_num_list):
             return item
         else:
             return 0
+
 
 # variety
 def extract_blend_from_variety(variety):
@@ -93,7 +91,7 @@ def extract_blend_from_variety(variety):
              Returns
              -------
              integer (1 or 0)
-             """
+    """
 
     if (variety.find("-") != -1) | (variety.find("Blend") != -1):
         if variety == "Xarel-lo":
@@ -102,6 +100,7 @@ def extract_blend_from_variety(variety):
             return 1
     else:
         return 0
+
 
 # @click.command()
 # @click.option('--in-train-csv')
@@ -119,23 +118,41 @@ def extract_features(in_train_csv, in_test_csv, out_dir):
     # make a list values of
     # is_red, is_white, is_rose,
     # is_sparkling, is_dry, is_sweet
-    is_red_list = ["red", "Red", "RED",
-                   "noir", "NOIR", "Noir",
-                   "black", "BLACK", "Black"]
+    is_red_list = [
+        "red",
+        "Red",
+        "RED",
+        "noir",
+        "NOIR",
+        "Noir",
+        "black",
+        "BLACK",
+        "Black",
+    ]
 
-    is_white_list = ["white", "WHITE", "White",
-                     "blanc", "Blanc", "BLANC",
-                     "bianco", "Bianco", "BIANCO",
-                     "blanco", "Blanco", "BLANCO",
-                     "blanca", "Blanca", "BLANCA"]
+    is_white_list = [
+        "white",
+        "WHITE",
+        "White",
+        "blanc",
+        "Blanc",
+        "BLANC",
+        "bianco",
+        "Bianco",
+        "BIANCO",
+        "blanco",
+        "Blanco",
+        "BLANCO",
+        "blanca",
+        "Blanca",
+        "BLANCA",
+    ]
 
-    is_rose_list = ["rose", "ROSE", "Rose",
-                    "rosé", "Rosé", "ROSÉ"]
+    is_rose_list = ["rose", "ROSE", "Rose", "rosé", "Rosé", "ROSÉ"]
 
     is_sparkling_list = ["sparkling", "SPARKLING", "Sparkling"]
 
-    is_dry_list = ["dry", "Dry", "DRY",
-                   "dried", "Dried", "DRIED"]
+    is_dry_list = ["dry", "Dry", "DRY", "dried", "Dried", "DRIED"]
 
     is_sweet_list = ["sweet", "Sweet", "SWEET"]
 
@@ -145,62 +162,44 @@ def extract_features(in_train_csv, in_test_csv, out_dir):
         "is_rose": is_rose_list,
         "is_sparkling": is_sparkling_list,
         "is_dry": is_dry_list,
-        "is_sweet": is_sweet_list
+        "is_sweet": is_sweet_list,
     }
 
     # add is_red, is_white, is_rose, is_sparkling, is_dry, is_sweet
     # to train and test datasets
     for key, value in desc_extracting_dict.items():
-        interim_train = extract_features_from_description(
-            train_df, key, value)
-        interim_test = extract_features_from_description(
-            test_df, key, value)
-
+        interim_train = extract_features_from_description(train_df, key, value)
+        interim_test = extract_features_from_description(test_df, key, value)
 
     # add year to train dataset
-    interim_train["title_numlist"] = (interim_train
-                                      .title
-                                      .str
-                                      .findall(r'\b\d+\b'))
+    interim_train["title_numlist"] = interim_train.title.str.findall(r"\b\d+\b")
 
-    interim_train["year"] = (interim_train
-                             .title_numlist
-                             .apply(extract_year_from_title))
+    interim_train["year"] = interim_train.title_numlist.apply(extract_year_from_title)
 
     # add year to test dataset
-    interim_test["title_numlist"] = (interim_test
-                                     .title
-                                     .str
-                                     .findall(r'\b\d+\b'))
+    interim_test["title_numlist"] = interim_test.title.str.findall(r"\b\d+\b")
 
-    interim_test["year"] = (interim_test
-                            .title_numlist
-                            .apply(extract_year_from_title))
+    interim_test["year"] = interim_test.title_numlist.apply(extract_year_from_title)
 
     # add is_blend to train dataset
-    interim_train["is_blend"] = (interim_train
-                                 .variety
-                                 .apply(extract_blend_from_variety))
+    interim_train["is_blend"] = interim_train.variety.apply(extract_blend_from_variety)
 
     # add is_blend to test dataset
-    interim_test["is_blend"] = (interim_test
-                                .variety
-                                .apply(extract_blend_from_variety))
+    interim_test["is_blend"] = interim_test.variety.apply(extract_blend_from_variety)
 
     # drop unnecessary columns from train test datasets
-    features_added_train = (interim_train
-                            .drop(columns=["description",
-                                           "title",
-                                           "title_numlist"]))
+    features_added_train = interim_train.drop(
+        columns=["description", "title", "title_numlist"]
+    )
 
-    features_added_test = (interim_test
-                           .drop(columns=["description",
-                                           "title",
-                                           "title_numlist"]))
+    features_added_test = interim_test.drop(
+        columns=["description", "title", "title_numlist"]
+    )
 
     _save_datasets(features_added_train, features_added_test, out_dir)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # load the config yaml
     config = read_yaml()
 

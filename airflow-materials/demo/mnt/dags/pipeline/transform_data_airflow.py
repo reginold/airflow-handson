@@ -1,15 +1,17 @@
-import pandas as pd
-import click
 from pathlib import Path
+
+import click
+import pandas as pd
 from category_encoders.ordinal import OrdinalEncoder
+
 from module.read_yaml import read_yaml
 
 
 def _save_datasets(train, test, outdir: Path):
     """save transformed train and test datasets and write SUCCESS flag."""
     # csv paths and flag path
-    out_train = outdir / 'train_transformed.csv/'
-    out_test = outdir / 'test_transformed.csv/'
+    out_train = outdir / "train_transformed.csv/"
+    out_test = outdir / "test_transformed.csv/"
 
     # save as csv and create flag file
     train.to_csv(str(out_train), index=False)
@@ -19,40 +21,40 @@ def _save_datasets(train, test, outdir: Path):
 def EncodeCategoricalData(train_df, test_df):
     """encode data with OrdinalEncoder
 
-            Parameters
-            ----------
-            train_df: dataframe
-                training dataframe object to fit and transform
-            test_df: dataframe
-                test dataframe object to transform
+    Parameters
+    ----------
+    train_df: dataframe
+        training dataframe object to fit and transform
+    test_df: dataframe
+        test dataframe object to transform
 
-            Returns
-            -------
-            transformed training and test dataframe
-            """
+    Returns
+    -------
+    transformed training and test dataframe
+    """
 
     # column list to ordinal encode
-    ordinal_encode_cols = ["country", "province",
-                           "region_1", "taster_name", "variety"]
+    ordinal_encode_cols = ["country", "province", "region_1", "taster_name", "variety"]
 
     # create ordinal encode object
     # object assigns -1 to the first-time-seen values of the test set
-    ordinal_encoder = OrdinalEncoder(cols=ordinal_encode_cols,
-                                     return_df=True,
-                                     handle_unknown="value",
-                                     handle_missing="return_nan")
+    ordinal_encoder = OrdinalEncoder(
+        cols=ordinal_encode_cols,
+        return_df=True,
+        handle_unknown="value",
+        handle_missing="return_nan",
+    )
 
     # fit object on the train dataset
     ordinal_encoder.fit(train_df)
 
     # transform train and test datasets
-    ord_encoded_train = (ordinal_encoder
-                         .transform(train_df))
+    ord_encoded_train = ordinal_encoder.transform(train_df)
 
-    ord_encoded_test = (ordinal_encoder
-                        .transform(test_df))
+    ord_encoded_test = ordinal_encoder.transform(test_df)
 
     return ord_encoded_train, ord_encoded_test
+
 
 # @click.command()
 # @click.option('--in-train-csv')
@@ -60,7 +62,7 @@ def EncodeCategoricalData(train_df, test_df):
 # @click.option('--out-dir')
 # @click.option('--flag')
 def transform_datasets(in_train_csv, in_test_csv, out_dir):
-    #crete directory
+    # crete directory
     out_dir = Path(out_dir)
 
     # load data
@@ -75,7 +77,8 @@ def transform_datasets(in_train_csv, in_test_csv, out_dir):
 
     _save_datasets(transformed_train, transformed_test, out_dir)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # load the config yaml
     config = read_yaml()
 

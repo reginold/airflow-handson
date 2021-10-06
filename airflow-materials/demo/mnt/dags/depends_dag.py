@@ -1,9 +1,10 @@
 from datetime import datetime
+
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 
 default_args = {
-    "start_date": datetime(2021, 9, 21),
+    "start_date": datetime(2021, 10, 5),
     "owner": "RDL",
     "email": "owner@test.com",
 }
@@ -41,13 +42,13 @@ with DAG(
     transform_data = BashOperator(
         task_id="transform_data",
         bash_command="python ~/dags/pipeline/transform_data_airflow.py",
-    ) 
+    )
 
     # Task 6: impute_datasets
     impute_datasets = BashOperator(
         task_id="impute_datasets",
         bash_command="python ~/dags/pipeline/impute_data_airflow.py",
-    ) 
+    )
 
     # Task 7: train model
     train_model = BashOperator(
