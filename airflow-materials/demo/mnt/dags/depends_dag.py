@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 
 default_args = {
-    "start_date": datetime(2021, 10, 5),
+    "start_date": datetime(2021, 10, 18),
     "owner": "RDL",
     "email": "owner@test.com",
 }
@@ -15,8 +15,8 @@ with DAG(
 ) as dag:
 
     # Task 1: Download the data
-    down_dataset = BashOperator(
-        task_id="down_dataset",
+    download_dataset = BashOperator(
+        task_id="download_dataset",
         bash_command="python ~/dags/pipeline/download_data_airflow.py",
     )
 
@@ -61,6 +61,6 @@ with DAG(
         task_id="evaluate_model",
         bash_command="python ~/dags/pipeline/evaluate_model_airflow.py",
     )
-    down_dataset >> make_dataset >> clean_dataset
+    download_dataset >> make_dataset >> clean_dataset
     clean_dataset >> extract_feature >> transform_data
     transform_data >> impute_datasets >> train_model >> evaluate_model
