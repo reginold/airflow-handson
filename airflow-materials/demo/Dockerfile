@@ -13,6 +13,7 @@ ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 RUN apt-get update -yqq && \
     apt-get upgrade -yqq && \
     apt-get install -yqq --no-install-recommends \ 
+    sudo \
     wget \
     libczmq-dev \
     curl \
@@ -35,6 +36,7 @@ RUN apt-get update -yqq && \
     && apt-get clean
 
 COPY ./constraints-3.8.txt /constraints-3.8.txt
+RUN pip install apache-airflow-providers-docker
 
 # Upgrade pip
 # Create airflow user 
@@ -52,11 +54,14 @@ COPY ./entrypoint.sh ./entrypoint.sh
 # Set the entrypoint.sh file to be executable
 RUN chmod +x ./entrypoint.sh
 
+
 # Set the owner of the files in AIRFLOW_HOME to the user airflow
 RUN chown -R airflow: ${AIRFLOW_HOME}
 
 # Set the username to use
 USER airflow
+# RUN touch /var/run/docker.sock
+# RUN chown -R airflow /var/run/docker.sock
 
 # Set workdir (it's like a cd inside the container)
 WORKDIR ${AIRFLOW_HOME}
